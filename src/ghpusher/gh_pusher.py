@@ -1,7 +1,7 @@
 """Command line tool for pushing to github pages."""
 from glob import glob
 import os
-from shutil import move
+import shutil
 from typing import Callable, NamedTuple, Any, Dict
 
 import click
@@ -88,15 +88,30 @@ class GitService(object):
 class FileService(object):
     """Service to orchestra file operations."""
 
-    def __init__(self, mover: Callable, globber: Callable) -> None:
+    def __init__(self, shutil: Any, globber: Callable, path_ops: Any, file_ops: Any) -> None:
         """
         Create a new FileService.
 
-        :param mover: Function to move files.
+        :param shutil: shell utilities.
         :param globber: Function to glob directories.
+        :param path_ops: Function to operate on paths.
         """
-        self.mover = mover
+        self.shutil = shutil
         self.globber = globber
+        self.path_ops = path_ops
+        self.file_ops = file_ops
+
+    def remove(self, target: str) -> None:
+        """
+        Remove the given file if it exists.
+
+        :param target: File or directory to remove.
+        """
+        if self.path_ops.exists(target):
+            if self.path_ops.isfile(target):
+                self.file_ops.remove(target)
+            else:
+                self.shutil.rmtree(target)
 
     def move_files(self, parent_dir: str, target_dir: str) -> None:
         """
@@ -107,7 +122,9 @@ class FileService(object):
         """
         files = self.globber(f"{parent_dir}/*")
         for f in files:
-            self.mover(f, target_dir)
+            target_file = f"{target_dir}/{self.path_ops.basename(f)}"
+            self.remove(target_file)
+            self.shutil.move(f, target_dir)
 
 
 class GhPushService(object):
@@ -173,7 +190,7 @@ def gh_push(**options: Dict[str, Any]) -> None:
     git = local[git_binary]
 
     git_service = GitService(git)
-    file_service = FileService(move, glob)
+    file_service = FileService(shutil, glob, os.path, os)
     gh_push_service = GhPushService(git_service, file_service)
 
     gh_push_service.push_changes(repo_base, build_dir, target_branch)

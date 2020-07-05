@@ -93,9 +93,7 @@ class TestGitService:
 
 
 def mocked_file_service():
-    move_mock = MagicMock()
-    glob_mock = MagicMock()
-    return under_test.FileService(move_mock, glob_mock)
+    return under_test.FileService(MagicMock(), MagicMock(), MagicMock(), MagicMock())
 
 
 class TestFileSerice:
@@ -107,11 +105,34 @@ class TestFileSerice:
     def test_move_files(self, file_list, target_dir, parent_dir):
         file_service = mocked_file_service()
 
+        file_service.path_ops.exists.return_value = False
         file_service.globber.return_value = file_list
 
         file_service.move_files(parent_dir, target_dir)
 
         file_service.globber.assert_called_with(f"{parent_dir}/*")
-        assert file_service.mover.call_count == len(file_list)
+        assert file_service.shutil.move.call_count == len(file_list)
         for f in file_list:
-            file_service.mover.assert_any_call(f, target_dir)
+            file_service.shutil.move.assert_any_call(f, target_dir)
+
+    @given(target=st.text(alphabet=list(ascii_letters), min_size=1))
+    def test_remove_a_file(self, target):
+        file_service = mocked_file_service()
+
+        file_service.path_ops.exists.return_value = True
+        file_service.path_ops.isfile.return_value = True
+
+        file_service.remove(target)
+
+        file_service.file_ops.remove.assert_called_with(target)
+
+    @given(target=st.text(alphabet=list(ascii_letters), min_size=1))
+    def test_remove_a_directory(self, target):
+        file_service = mocked_file_service()
+
+        file_service.path_ops.exists.return_value = True
+        file_service.path_ops.isfile.return_value = False
+
+        file_service.remove(target)
+
+        file_service.shutil.rmtree.assert_called_with(target)
