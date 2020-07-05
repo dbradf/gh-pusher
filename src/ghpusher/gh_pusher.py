@@ -80,6 +80,10 @@ class GitService(object):
         """
         self.git("push", "origin", branch)
 
+    def get_active_branch(self) -> str:
+        """Get the active branch."""
+        return self.git("branch", "--show-current").strip()
+
 
 class FileService(object):
     """Service to orchestra file operations."""
@@ -128,6 +132,7 @@ class GhPushService(object):
         :param target_branch: Name of branch to publish to.
         """
         with local.cwd(repo_base):
+            active_branch = self.git_service.get_active_branch()
             commit_data = self.git_service.get_last_commit()
             self.git_service.switch_branch(target_branch)
 
@@ -135,6 +140,8 @@ class GhPushService(object):
             if self.git_service.git_changes_exist():
                 self.git_service.commit_all_files(commit_data)
                 self.git_service.push_branch(target_branch)
+
+            self.git_service.switch_branch(active_branch)
 
 
 @click.command()

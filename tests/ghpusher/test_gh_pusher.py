@@ -82,6 +82,15 @@ class TestGitService:
 
         git_service.git.assert_called_with("push", "origin", branch)
 
+    @given(branch=st.text(alphabet=list(ascii_letters), min_size=1))
+    def test_get_active_branch(self, branch):
+        git_service = mocked_git_service()
+        git_service.git.return_value = f"{branch}\n\n"
+
+        active_branch = git_service.get_active_branch()
+
+        assert active_branch == branch
+
 
 def mocked_file_service():
     move_mock = MagicMock()

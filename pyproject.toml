@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ghpusher"
-version = "0.1.1"
+version = "0.2.0"
 description = "Push HTML to a github pages branch"
 authors = ["David Bradford <david.bradford@mongodb.com>"]
 license = "Apache-2.0"
