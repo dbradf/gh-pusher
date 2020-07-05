@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "ghpusher"
+version = "0.1.0"
+description = "Push HTML to a github pages branch"
+authors = ["David Bradford <david.bradford@mongodb.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/dbradf/gh-pusher"
+
+[tool.poetry.scripts]
+gh-pusher = 'ghpusher.gh_pusher:gh_push'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Click = "^7.0"
+plumbum = "^1.6.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3"
+pytest-black = "^0.3.7"
+pytest-cov = "^2.8"
+pytest-flake8 = "^1.0"
+pytest-mypy = "^0.4"
+pytest-pydocstyle = "^2.0"
+pytest-sugar = "^0.9.2"
+black = "^19.10b0"
+hypothesis = "^5.19.0"
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+
