@@ -1,6 +1,4 @@
 """Command line tool for pushing to github pages."""
-from __future__ import annotations
-
 from glob import glob
 import os
 from shutil import move
@@ -20,7 +18,7 @@ class CommitMetaData(NamedTuple):
     message: str
 
     @classmethod
-    def from_git_history(cls, commit_str: str) -> CommitMetaData:
+    def from_git_history(cls, commit_str: str) -> "CommitMetaData":
         """
         Create commit history metadata from the given string.
 

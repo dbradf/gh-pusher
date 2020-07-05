@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ghpusher"
-version = "0.1.0"
+version = "0.1.1"
 description = "Push HTML to a github pages branch"
 authors = ["David Bradford <david.bradford@mongodb.com>"]
 license = "Apache-2.0"
@@ -11,7 +11,7 @@ repository = "https://github.com/dbradf/gh-pusher"
 gh-pusher = 'ghpusher.gh_pusher:gh_push'
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 Click = "^7.0"
 plumbum = "^1.6.9"
 

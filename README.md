@@ -2,9 +2,14 @@
 
 A tool to push changes to a gh-pages branch.
 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ghpusher) ![PyPI](https://img.shields.io/pypi/v/ghpusher.svg) [![Actions Status](https://github.com/dbradf/gh-pusher/workflows/test-python-project/badge.svg)](https://github.com/dbradf/gh-pusher/actions)
+
+
 ## Install
 
-<TBD>
+```bash
+$ pip install ghpusher
+```
 
 ## Usage
 
