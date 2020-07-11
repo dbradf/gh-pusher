@@ -82,7 +82,7 @@ class GitService(object):
 
     def get_active_branch(self) -> str:
         """Get the active branch."""
-        return self.git("branch", "--show-current").strip()
+        return self.git("rev-parse", "--abbrev-ref", "HEAD").strip()
 
 
 class FileService(object):
